@@ -4,8 +4,8 @@ interface Document {
 }
 
 interface Citation {
-  file_name: string;
-  chunk_index: number;
+  document: string;
+  chunk: number;
 }
 
 interface Props {
@@ -189,7 +189,7 @@ export default function AskAI({
                             key={index}
                             className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-xs text-white/65"
                           >
-                            {citation.file_name} - Chunk {citation.chunk_index}
+                            {citation.document} - Chunk {citation.chunk}
                           </span>
                         ))}
                       </div>

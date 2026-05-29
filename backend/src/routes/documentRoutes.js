@@ -276,7 +276,10 @@ Provide a concise helpful answer.
 
       res.json({
         answer,
-        citations: [],
+        citations: chunks.map((chunk) => ({
+          document: chunk.documents?.file_name,
+          chunk: chunk.chunk_index,
+        })),
       });
     } catch (err) {
       console.error("ASK ROUTE ERROR:", err);
