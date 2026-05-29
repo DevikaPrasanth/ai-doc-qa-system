@@ -23,7 +23,6 @@ router.post(
   upload.single("file"),
   authMiddleware,
   async (req, res) => {
-    console.log("UPLOAD ROUTE HIT");
     try {
       const file = req.file;
 
@@ -36,14 +35,9 @@ router.post(
       const pdfData = await pdfParse(file.buffer);
       const extractedText = pdfData.text;
 
-      console.log("EXTRACTED TEXT:");
-      console.log(extractedText);
-
       const chunks = chunkText(
         extractedText || "No text found"
       );
-
-      console.log("TOTAL CHUNKS:", chunks.length);
 
       const userId = req.user.id;
 
@@ -83,9 +77,6 @@ router.post(
         });
       }
 
-      console.log("DOCUMENT INSERTED");
-      console.log(insertedDocument);
-
       const chunkRows = chunks.map(
         (chunk, index) => ({
           document_id: insertedDocument.id,
@@ -94,48 +85,22 @@ router.post(
         })
       );
 
-      console.log("INSERTING CHUNKS");
-
       const { error: chunkError } = await supabase
         .from("document_chunks")
         .insert(chunkRows);
 
       if (chunkError) {
-        console.log("CHUNK ERROR:", chunkError);
-
         return res.status(500).json({
           error: chunkError.message,
         });
       }
-
-      console.log("CHUNKS INSERTED");
-
-      // // Save chunks
-      // console.log("CHUNKS COUNT:", chunks.length);
-      // const chunkRows = chunks.map(
-      //   (chunk, index) => ({
-      //     document_id: insertedDocument.id,
-      //     content: chunk,
-      //     chunk_index: index,
-      //   })
-      // );
-
-      // const { error: chunkError } = await supabase
-      //   .from("document_chunks")
-      //   .insert(chunkRows);
-
-      // if (chunkError) {
-      //   return res.status(500).json({
-      //     error: chunkError.message,
-      //   });
-      // }
 
       res.json({
         message: "File uploaded successfully",
         data,
       });
     } catch (err) {
-      console.error("FULL ERROR:", err);
+      console.error(err);
 
       res.status(500).json({
         error: err.message || err,
@@ -239,9 +204,6 @@ router.post(
   authMiddleware,
   async (req, res) => {
     try {
-      console.log("ASK ROUTE HIT");
-      console.log("ASK BODY:", req.body);
-
       const { question, documentId } = req.body;
 
       if (!documentId) {
@@ -268,9 +230,6 @@ router.post(
         `)
         .eq("document_id", documentId)
         .limit(10);
-
-      console.log("RETRIEVED CHUNKS:");
-      console.log(chunks);
 
       if (error) {
         return res.status(500).json({
@@ -309,16 +268,11 @@ ${context}
 Provide a concise helpful answer.
 `;
 
-      console.log("PROMPT:");
-      console.log(prompt);
-
       const result = await model.generateContent(prompt);
 
       const response = await result.response;
 
       const answer = response.text();
-
-      console.log(answer);
 
       res.json({
         answer,
@@ -329,7 +283,7 @@ Provide a concise helpful answer.
       console.error("ASK ROUTE ERROR DETAILS:", err.response?.data || err.message);
 
       res.status(500).json({
-        error: err.message || "Internal server error",
+        error: "Unable to generate answer. Please try again.",
       });
     }
   }

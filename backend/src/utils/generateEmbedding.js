@@ -14,7 +14,6 @@ const generateEmbedding = async (text) => {
       }
     );
 
-    console.log(response.data);
     return response.data[0];
   } catch (error) {
     console.error(
