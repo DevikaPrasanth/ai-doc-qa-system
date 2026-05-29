@@ -73,7 +73,43 @@ Users can upload PDF documents, securely store them, and ask questions about the
 
 * Google Gemini 2.5 Flash
 
+## AI Tool Usage
+
+Tools Used:
+- ChatGPT
+- Codex
+
+How AI helped:
+- Architecture planning
+- Debugging deployment issues
+- UI refinement
+
+Where I overrode AI suggestions:
+- Chose document-specific retrieval instead of multi-document search to avoid over-engineering and improve answer relevance.
+
 ---
+
+## Trade-offs
+
+Given the assignment timeline:
+
+Prioritized:
+- Authentication
+- Secure document isolation
+- Reliable AI Q&A
+- Deployment
+
+Deferred:
+- Vector embeddings
+- Semantic search
+- Multi-document querying
+- OCR support
+
+Future improvements:
+- Embedding-based retrieval
+- Multi-document search
+- Conversation history
+
 
 ## System Architecture
 
