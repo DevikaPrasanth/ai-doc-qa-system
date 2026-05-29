@@ -1,7 +1,7 @@
 import axios from "axios";
 import { supabase } from "@/lib/supabase";
 
-const API_BASE = "http://localhost:5000/api/documents";
+const API_BASE = `${process.env.NEXT_PUBLIC_API_URL ?? ""}/api/documents`;
 
 const getAuthHeaders = async () => {
   const {
