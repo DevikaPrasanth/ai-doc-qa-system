@@ -7,7 +7,11 @@ const app = express();
 
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: [
+      "http://localhost:3000",
+      "https://ai-doc-qa-system.vercel.app",
+    ],
+    credentials: true,
   })
 );
 app.use(express.json());
