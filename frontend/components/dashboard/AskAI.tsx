@@ -62,6 +62,7 @@ export default function AskAI({
               onChange={(e) =>
                 onSelectedDocumentChange(e.target.value)
               }
+              disabled={documents.length === 0}
               className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 outline-none focus:border-purple-500 transition text-sm"
             >
               <option value="">Select a document</option>
@@ -217,16 +218,17 @@ export default function AskAI({
             value={question}
             onChange={(e) => onQuestionChange(e.target.value)}
             onKeyDown={(e) => {
-              if (e.key === "Enter" && !loading) {
+              if (e.key === "Enter" && !loading && documents.length > 0 && selectedDocument) {
                 onAsk();
               }
             }}
+            disabled={documents.length === 0 || !selectedDocument}
             className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 outline-none focus:border-purple-500 transition"
           />
 
           <button
             onClick={onAsk}
-            disabled={loading}
+            disabled={loading || documents.length === 0 || !selectedDocument}
             className="bg-white text-black px-6 py-3 rounded-xl font-medium hover:scale-[1.02] transition disabled:opacity-70 disabled:hover:scale-100"
           >
             {loading ? "Thinking" : "Ask"}

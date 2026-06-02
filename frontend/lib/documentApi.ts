@@ -22,7 +22,7 @@ export const fetchDocuments = async () => {
     headers: await getAuthHeaders(),
   });
 
-  return response.data;
+  return response.data.data ?? response.data;
 };
 
 export const deleteDocument = async (id: string) => {
@@ -40,7 +40,7 @@ export const uploadDocument = async (file: File) => {
     headers: await getAuthHeaders(),
   });
 
-  return response.data;
+  return response.data.data;
 };
 
 export const askDocumentQuestion = async (
@@ -58,5 +58,5 @@ export const askDocumentQuestion = async (
     }
   );
 
-  return response.data;
+  return response.data.data ?? response.data;
 };

@@ -4,7 +4,7 @@ const supabase = require("../config/supabaseClient");
 const authMiddleware = require("../middleware/authMiddleware");
 const generateEmbedding = require("../utils/generateEmbedding");
 const model = require("../config/geminiClient");
-const pdfParse = require("pdf-parse");
+const extractPdfContent = require("../utils/extractPdfContent");
 
 const router = express.Router();
 
@@ -32,11 +32,10 @@ router.post(
         });
       }
 
-      const pdfData = await pdfParse(file.buffer);
-      const extractedText = pdfData.text;
+      const pdfContent = await extractPdfContent(file.buffer);
 
       const chunks = chunkText(
-        extractedText || "No text found"
+        pdfContent.content || "No text found"
       );
 
       const userId = req.user.id;
@@ -97,7 +96,16 @@ router.post(
 
       res.json({
         message: "File uploaded successfully",
-        data,
+        data: {
+          ...data,
+          extraction: {
+            textExtracted: Boolean(pdfContent.text),
+            tablesDetected: pdfContent.tables.length,
+            note: pdfContent.tables.length
+              ? "Table-like content was detected and added as markdown-style text. Complex tables may still lose exact row or column formatting."
+              : "PDF text was extracted with pdf-parse. If the PDF contains tables, rows and columns may be flattened.",
+          },
+        },
       });
     } catch (err) {
       console.error(err);

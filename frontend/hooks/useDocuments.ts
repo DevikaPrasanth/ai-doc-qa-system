@@ -16,7 +16,7 @@ export const useDocuments = () => {
     try {
       setLoadingDocuments(true);
       const data = await fetchDocuments();
-      setDocuments(data);
+      setDocuments(data || []);
     } catch (err) {
       console.error(err);
     } finally {

@@ -25,8 +25,11 @@ export default function UploadPage() {
 
     try {
       setUploading(true);
-      await uploadDocument(file);
-      setUploadMessage("Upload successful. Your document is ready for questions.");
+      const uploadResult = await uploadDocument(file);
+      setUploadMessage(
+        uploadResult?.extraction?.note ||
+          "Upload successful. Your document is ready for questions."
+      );
       e.target.value = "";
     } catch (err) {
       console.error(err);

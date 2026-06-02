@@ -92,9 +92,12 @@ export default function DashboardPage() {
 
     try {
       setUploading(true);
-      await uploadDocument(file);
+      const uploadResult = await uploadDocument(file);
 
-      setUploadMessage("Upload successful. Your document is ready for questions.");
+      setUploadMessage(
+        uploadResult?.extraction?.note ||
+          "Upload successful. Your document is ready for questions."
+      );
       refreshDocuments();
       e.target.value = "";
     } catch (err) {
